@@ -129,6 +129,32 @@ int main()
 	TriMatrix Tri;			// Instantiate the class
 	Tri.set_A(v, Nx);		// Populate the the Trimatrix class
 
+	// Initialise the Un and U vectors that will form the time iteration loop
+
+	vector<double> Un(Nx + 1);		// Initialize Un
+	vector<double> U(Nx + 1);		// Initialise U
+
+	for (int i = 0; i<Nx + 1; i++)
+	{
+		U[i] = U_O[i];				// Set the U of the first iteration as initial vector
+	}
+
+	for (int i = 0; i <= Nt; i++)
+	{
+		Un = Tri.get_U(U);			// Class implementation
+		U = Un;						// Form U for the next iteration
+	}
+
+	// Display the final temperature vector
+
+	cout << "The final temperature vector" << endl << endl;		// Print on output screen
+	
+	for (int i = 0; i<Nx + 1; i++)
+	{
+		cout << U[i] << " ";		// Output the final temperature vector
+	}
+	cout << endl << endl;
+
 	system("pause");
 	
 	return 0;
