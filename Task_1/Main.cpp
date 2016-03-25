@@ -8,6 +8,8 @@
 
 #include<iostream>
 #include<vector>
+#include "TriMatrix.h"
+#include "Main.h"
 
 using namespace std;
 
@@ -99,7 +101,10 @@ int main()
 
 	// Define the x vector with the position co-ordinates of the nodes
 
-	std::vector<float> x(Nx + 1);		// Initialise the x vector
+	cout << endl;
+	cout << "The position co-ordinates vector" << endl << endl;		// Print on output screen
+
+	vector<float> x(Nx + 1);		// Initialise the x vector
 	for (int i = 0; i <= Nx; i++)		// Start the loop to go through all the nodes
 	{
 		x[i] = i*dx;					// Calculate and assign the x co-ordinates
@@ -109,7 +114,9 @@ int main()
 
 	// Define the initial conditions vector
 
-	std::vector<float> U_O(Nx + 1);		// Initialise the intial conditions vector
+	cout << "The initial temperature vector" << endl << endl;	// Print on output screen
+
+	vector<float> U_O(Nx + 1);		// Initialise the intial conditions vector
 	for (int i = 0; i <= Nx; i++)		// Start the loop to go through all the nodes
 	{
 		U_O[i] = x[i]*(1-x[i]);			// Calculate and assign the temperature at each node using the given function
@@ -117,7 +124,13 @@ int main()
 	}
 	cout << endl << endl;
 
+	// Set the coefficient matrix A using the TriMatrix Class
+
+	TriMatrix Tri;			// Instantiate the class
+	Tri.set_A(v, Nx);		// Populate the the Trimatrix class
+
 	system("pause");
 	
-	return L, Nx, T, Nt, a;
+	return 0;
 }
+
