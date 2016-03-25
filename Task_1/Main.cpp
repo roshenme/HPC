@@ -51,7 +51,7 @@ int main()
 
 	do
 	{
-		cout << "Enter the final time  ";				// Ask for T in the command window
+		cout << "Enter the final time  ";			// Ask for T in the command window
 		cin >> T;									// Assign the value to T
 		if (T == 0 || cin.fail())					// Check whether the input is a number and non-zero
 		{											// Otherwise display the following error message	
@@ -88,6 +88,34 @@ int main()
 			cin.ignore();
 		}
 	} while (a == 0 || cin.fail());
+
+	// Calculate dx, dt and v
+
+	float dx, dt, v;	// Declare the variables
+
+	dx = L / Nx;			// Mesh size is length of domain divided by the number of nodes
+	dt = T / Nt;			// Time step size if final time divided by the number of time steps
+	v = (a*dt) / (dx*dx);	// Constant
+
+	// Define the x vector with the position co-ordinates of the nodes
+
+	std::vector<float> x(Nx + 1);		// Initialise the x vector
+	for (int i = 0; i <= Nx; i++)		// Start the loop to go through all the nodes
+	{
+		x[i] = i*dx;					// Calculate and assign the x co-ordinates
+		cout << x[i] << " ";			// Output the x co-ordinates vector
+	}
+	cout << endl << endl;				
+
+	// Define the initial conditions vector
+
+	std::vector<float> U_O(Nx + 1);		// Initialise the intial conditions vector
+	for (int i = 0; i <= Nx; i++)		// Start the loop to go through all the nodes
+	{
+		U_O[i] = x[i]*(1-x[i]);			// Calculate and assign the temperature at each node using the given function
+		cout << U_O[i] << " ";			// Output intial conditions vector
+	}
+	cout << endl << endl;
 
 	system("pause");
 	
