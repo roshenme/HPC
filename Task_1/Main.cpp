@@ -96,7 +96,7 @@ int main()
 	dt = T / Nt;			// Time step size if final time divided by the number of time steps
 	v = (a*dt) / (dx*dx);	// Constant
 
-							// Define the x vector with the position co-ordinates of the nodes
+	// Define the x vector with the position co-ordinates of the nodes
 
 	cout << endl;
 	cout << "The position co-ordinates vector" << endl << endl;		// Print on output screen
