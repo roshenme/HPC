@@ -14,15 +14,28 @@ TriMatrix::TriMatrix() {}
 
 // Set the coefficient matrix A
 
-void TriMatrix::set_A(vector<double> Upper, vector<double> Main, vector<double> Lower)
+void TriMatrix::set_A(vector<double> UpperA, vector<double> MainA, vector<double> LowerA)
 {
-	int N = Upper.size();			// Define size N
-	SuperDiag.resize(N);			// Set the size of the super diagonal to N
-	SuperDiag = Upper;
-	MainDiag.resize(N+1);			// Set the size of the main diagonal to N+1
-	MainDiag = Main;
-	SubDiag.resize(N);				// Set the size of the sub diagonal to N
-	SubDiag = Lower;
+	int N = UpperA.size();			// Define size N
+	SuperDiagA.resize(N);			// Set the size of the super diagonal to N
+	SuperDiagA = UpperA;
+	MainDiagA.resize(N+1);			// Set the size of the main diagonal to N+1
+	MainDiagA = MainA;
+	SubDiagA.resize(N);				// Set the size of the sub diagonal to N
+	SubDiagA = LowerA;
+}
+
+// Set the coefficient matrix B
+
+void TriMatrix::set_B(vector<double> UpperB, vector<double> MainB, vector<double> LowerB)
+{
+	int N = UpperB.size();			// Define size N
+	SuperDiagB.resize(N);			// Set the size of the super diagonal to N
+	SuperDiagB = UpperB;
+	MainDiagA.resize(N + 1);			// Set the size of the main diagonal to N+1
+	MainDiagB = MainB;
+	SubDiagB.resize(N);				// Set the size of the sub diagonal to N
+	SubDiagB = LowerB;
 }
 
 // Implement matrix-vector multiplicaton to get the temperature vector
@@ -45,7 +58,7 @@ vector<double> TriMatrix::get_U(vector<double> u)
 
 	for (int i = 1; i < N - 1; i++)
 	{
-		Un[i] = (SuperDiag[i] * u[i + 1]) + (MainDiag[i] * u[i]) + (SubDiag[i - 1] * u[i - 1]);
+		Un[i] = (SuperDiagA[i] * u[i + 1]) + (MainDiagA[i] * u[i]) + (SubDiagA[i - 1] * u[i - 1]);
 	}
 	return Un;
 }
@@ -57,9 +70,9 @@ vector<double> TriMatrix::operator/(vector<double> U)
 	double m;						// Declare the variable m to be used in Thomas Algorithm
 	int N = U.size();				// Define the size of the input vector from main
 	std::vector<double> x(N);		// Initialize the x vector to hold the solutions
-	vector<double> c = SuperDiag;	// Define vector c as the super diagonal of the coefficient matrix
-	vector<double> b = MainDiag;	// Define vector b as the main diagonal of the coefficient matrix
-	vector<double> a = SubDiag;		// Define vector a as the sub diagonal of the coefficient matrix
+	vector<double> c = SuperDiagB;	// Define vector c as the super diagonal of the coefficient matrix
+	vector<double> b = MainDiagB;	// Define vector b as the main diagonal of the coefficient matrix
+	vector<double> a = SubDiagB;	// Define vector a as the sub diagonal of the coefficient matrix
 	vector<double> d = U;			// Define vector d as the RHS vector (solution vector of time step k)
 
 	// Loop for the forward elimination phase
