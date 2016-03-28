@@ -133,6 +133,7 @@ int main(int args, char** argv)
 	for (int i = 0; i < Nt+1; i++)
 	{
 		file << UL[i] << endl;			// Write one value at a time in a loop
+		file << i*dt << "\t" << U_L[i] << endl;
 	}
 
 	file.close();	// Close the file
