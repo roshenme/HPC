@@ -125,15 +125,14 @@ int main(int args, char** argv)
 		cout << UL[i] << " ";		// Output the temperature at L/2 at all time steps in vector form
 	}
 
-	// Write the UL vector into a .txt file to be used by python
+	// Write the time vector and UL vector into a .txt file to be used by python
 
 	ofstream file;
 	file.open("Temperaturehalf.txt");	// Open the file
 
 	for (int i = 0; i < Nt+1; i++)
 	{
-		file << UL[i] << endl;			// Write one value at a time in a loop
-		file << i*dt << "\t" << U_L[i] << endl;
+		file << i*dt << "\t" << UL[i] << endl;	// Write the time and temperature of L/2 at each time step
 	}
 
 	file.close();	// Close the file
