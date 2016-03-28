@@ -102,11 +102,22 @@ int main(int args, char** argv)
 	// Write the UL vector into a .txt file to be used by python
 
 	ofstream file;
-	file.open("Temperature.txt");			// Open the file
+	file.open("Temperaturehalf.txt");		// Open the file
 
-	for (int i = 0; i < UL.size(); i++)
+	for (int i = 0; i < Nt; i++)
 	{
 		file << UL[i] << endl;				// Write one value at a time in a loop
+	}
+
+	file.close();	// Close the file
+
+	// Write the U vector into a .txt file to be used by python
+
+	file.open("Temperature.txt");		// Open the file
+
+	for (int i = 0; i < Nx; i++)
+	{
+		file << U[i] << endl;				// Write one value at a time in a loop
 	}
 
 	file.close();	// Close the file
