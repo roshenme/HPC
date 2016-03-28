@@ -52,11 +52,13 @@ int main(int args, char** argv)
 
 	cout << "The initial temperature vector" << endl << endl;	// Print on output screen
 
-	vector<float> U_O(Nx + 1);			// Initialise the intial conditions vector
-	for (int i = 0; i <= Nx; i++)		// Start the loop to go through all the nodes
+	vector<float> U_O(Nx + 1);				// Initialise the intial conditions vector
+	U_O[0] = 0;								// Boundary condition when x=0
+	U_O[Nx] = 0;							// Boundary condition when x=L
+	for (int i = 1; i < Nx; i++)			// Start the loop to go through all the nodes
 	{
-		U_O[i] = x[i] * (1 - x[i]);		// Calculate and assign the temperature at each node using the given function
-		cout << U_O[i] << " ";			// Output intial conditions vector
+		U_O[i] = sin((22 / 7)*x[i] / L);	// Calculate and assign the temperature at each node using the given function
+		cout << U_O[i] << " ";				// Output intial conditions vector
 	}
 	cout << endl << endl;
 
@@ -103,7 +105,7 @@ int main(int args, char** argv)
 	{
 		Un = Tri.get_U(U);			// Class implementation
 		U = Un;						// Form U for the next iteration
-		UL[i] = U[Nx / 2 + 1];		// Store the temperature at L/2 at each time step
+		UL[i] = U[(Nx / 2) + 1];	// Store the temperature at L/2 at each time step
 	}
 
 	// Display the final temperature vector
