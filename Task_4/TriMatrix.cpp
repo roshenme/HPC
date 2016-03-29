@@ -91,12 +91,12 @@ vector<double> TriMatrix::MatVecSolve(vector<double> U)
 	int info;
 
 	vector<double> dl = SubDiagB;
-	dl.pop_back();
+	dl.push_back(0);
 
 	vector<double> d = MainDiagB;
 
 	vector<double> du = SuperDiagB;
-	dl.pop_back();
+	du.push_back(N);
 
 	dgtsv_(&N, &nrhs, &dl[0], &d[0], &du[0], &U[0], &ldb, &info);
 
