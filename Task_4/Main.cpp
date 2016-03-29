@@ -9,6 +9,8 @@
 #include<iostream>
 #include<vector>
 #include "TriMatrix.h"
+#include <ctime>
+//#include <fstream>
 
 using namespace std;
 
@@ -16,6 +18,9 @@ using namespace std;
 
 int main()
 {
+	clock_t start;						// Start the timer
+	start = clock();
+
 	float L, Nx, T, Nt, a, theta;		// Declare L, Nx, T, Nt, a as floating point numbers 
 
 	// Enter and Input L = The length of the domain
@@ -280,10 +285,17 @@ int main()
 			cout << UL[i] << " ";		// Output the temperature at L/2 at all time steps in vector form
 		}
 		
-		cout << endl << endl;
-		cout << endl << "Would you like to continue? (y=Yes,n=No)";
+		// Calculate the time to run the program
+
+		float dttt = (clock() - start) / (double)CLOCKS_PER_SEC;
+		cout << endl << endl << endl << "Time taken to run the program (s)" << endl << endl;		// Print on output screen
+		cout <<dttt << endl << endl;
+
+		// Ask the user whether he/she would like to continue and use the same/different scheme 
+
+		cout << endl << "Would you like to continue? (y = Yes, n = No) ";
 		cin >> cont;
-		cout << endl;
+		cout << endl << endl;
 	}
 
 	//// Write the time vector and UL vector into a .txt file to be used by python
