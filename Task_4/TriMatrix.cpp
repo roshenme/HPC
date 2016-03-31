@@ -35,6 +35,8 @@ void TriMatrix::set_A(vector<double> UpperA, vector<double> MainA, vector<double
 	SubDiagA.resize(N);				// Set the size of the sub diagonal to N
 	SubDiagA = LowerA;
 
+	// Store A in row major form
+
 	A.resize(3 * N);
 
 	for (int i = 0; i < N - 1; i++)
@@ -65,42 +67,50 @@ void TriMatrix::set_B(vector<double> UpperB, vector<double> MainB, vector<double
 vector<double> TriMatrix::get_U(vector<double> u)
 {
 	int n = u.size();				// Assign the size of U as variable N
-	int M = n;
-	int N = n;
-	int kl = 1;
-	int ku = 1;
-	double alpha = 1.0;
-	double beta = 0.0;
-	int lda = 3;
-	int incx = 1;
-	int incy = 1;
 
-	vector<double> y(n, 1);
+	// Provide the inputs for the BLAS function dgbmv
+
+	int M = n;			// Number of columns of the matrix A
+	int N = n;			// Number of rows of the matrix A
+	int kl = 1;			// Number of sub diagonals of matrix A
+	int ku = 1;			// Number of super diagonals of matrix A
+	double alpha = 1.0;	// Scalar provided get the equation in y=Au form
+	double beta = 0.0;	// Scalar provide to get the equation in y=Au form
+	int lda = 3;		// First dimension of A (kl+ku+1)
+	int incx = 1;		// Increment for the elements of u				
+	int incy = 1;		// Increment for the elements of y
+
+	vector<double> y(n, 1);			// Initialise the solution
+
+	// Implement the function dgbmv
 
 	dgbmv_('T', &M, &n, &kl, &ku, &alpha, &A[0], &lda, &u[0], &incx, &beta, &y[0], &incy);
-	return y;
+
+	return y;						// Return the matrix vector mutiplied product vector y
 }
 
-// Operator overloading to overload the forward slash operator
+// The Thomas Algorithm to solve the matrix equation
 
 vector<double> TriMatrix::MatVecSolve(vector<double> U)
 {
-	int N = U.size();				// Define the size of the input vector from main
-	int nrhs = 1;
-	int ldb = N;
+	int N = U.size();				// Define the size of the input vector from main (Order of matrix A)
+	int nrhs = 1;					// Number of columns of the RHS matrix (1=vector)
+	int ldb = N;					// Leading dimension of array B (Vector)
 	int info;
 
-	vector<double> dl = SubDiagB;
-	dl.push_back(0);
+	vector<double> dl = SubDiagB;	// Sub diagonal input to dgtsv
+	dl.push_back(0);				// Remove the first element from the sub diagonal
 
-	vector<double> d = MainDiagB;
+	vector<double> d = MainDiagB;	// Main diagonal input to dgtsv
 
-	vector<double> du = SuperDiagB;
-	du.push_back(N);
+	vector<double> du = SuperDiagB;	// Super diagonal input to dgtsv
+	du.push_back(N);				// Remove the last element from the super diagonal
+
+	// Implement the function dgtsv
 
 	dgtsv_(&N, &nrhs, &dl[0], &d[0], &du[0], &U[0], &ldb, &info);
 
-	return U;
+	return U;						// Return the solution U
 }
 
 // TriMatrix class destructor
