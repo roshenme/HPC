@@ -9,88 +9,26 @@
 #include<iostream>
 #include<vector>
 #include "TriMatrix.h"
-#include <ctime>
+#include<fstream>
+#include<math.h>
 
 using namespace std;
 
 // Start of the Main program
 
-int main()
+int main(int args, char** argv)
 {
-	clock_t start;						// Start the timer
-	start = clock();
-	
 	float L, Nx, T, Nt, a, theta;		// Declare L, Nx, T, Nt, a as floating point numbers 
 
-	// Enter and Input L = The length of the domain
+	// Variables are to be provided as arguments in the python program
 
-	do
-	{
-		cout << "Enter the length of the domain  ";	// Ask for L in the command window
-		cin >> L;									// Assign the value to L
-		if (L == 0 || cin.fail())					// Check whether the input is a number and non-zero
-		{											// Otherwise display the following error message	
-			cout << "Error: The length of the domain must be a number and non-zero." << endl << endl;
-			cin.clear();
-			cin.ignore();
-		}
-	} while (L == 0 || cin.fail());
+	L = atof(argv[1]);
+	Nx = atof(argv[2]);
+	T = atof(argv[3]);
+	Nt = atof(argv[4]);
+	a = atof(argv[5]);
 
-	// Enter and Input Nx = The number of nodes
-
-	do
-	{
-		cout << "Enter the number of nodes  ";		// Ask for Nx in the command window
-		cin >> Nx;									// Assign the value to Nx
-		if (Nx == 0 || cin.fail())					// Check whether the input is a number and non-zero
-		{											// Otherwise display the following error message	
-			cout << "Error: The number of nodes must be a number and non-zero." << endl << endl;
-			cin.clear();
-			cin.ignore();
-		}
-	} while (Nx == 0 || cin.fail());
-
-	// Enter and Input T = The final time
-
-	do
-	{
-		cout << "Enter the final time  ";			// Ask for T in the command window
-		cin >> T;									// Assign the value to T
-		if (T == 0 || cin.fail())					// Check whether the input is a number and non-zero
-		{											// Otherwise display the following error message	
-			cout << "Error: The final time must be a number and non-zero." << endl << endl;
-			cin.clear();
-			cin.ignore();
-		}
-	} while (T == 0 || cin.fail());
-
-	// Enter and Input Nt = The number of time steps
-
-	do
-	{
-		cout << "Enter the number of time steps  ";	// Ask for Nt in the command window
-		cin >> Nt;									// Assign the value to Nt
-		if (Nt == 0 || cin.fail())					// Check whether the input is a number and non-zero
-		{											// Otherwise display the following error message	
-			cout << "Error: The number of time steps must be a number and non-zero." << endl << endl;
-			cin.clear();
-			cin.ignore();
-		}
-	} while (Nt == 0 || cin.fail());
-
-	// Enter and Input a = Thermal coefficient
-
-	do
-	{
-		cout << "Enter the thermal coefficient  ";	// Ask for a in the command window
-		cin >> a;									// Assign the value to Nt
-		if (a == 0 || cin.fail())					// Check whether the input is a number and non-zero
-		{											// Otherwise display the following error message	
-			cout << "Error: The thermal coefficient must be a number and non-zero." << endl << endl;
-			cin.clear();
-			cin.ignore();
-		}
-	} while (a == 0 || cin.fail());
+	theta = 0.5;			// Need to run the Crank-Nicolson scheme
 
 	// Calculate dx, dt and v
 
@@ -122,26 +60,11 @@ int main()
 	U_O[Nx] = 0;							// Boundary condition when x=L
 	for (int i = 1; i < Nx; i++)			// Start the loop to go through all the nodes
 	{
-		U_O[i] = x[i] * (1 - x[i]);			// Calculate and assign the temperature at each node using the given function
-		//U_O[i] = sin((22 / 7)*x[i] / L);	// Calculate and assign the temperature at each node using the given function
+		//U_O[i] = x[i] * (1 - x[i]);				// Calculate and assign the temperature at each node using the given function
+		U_O[i] = sin((22 / 7)*x[i] / L);	// Calculate and assign the temperature at each node using the given function
 		cout << U_O[i] << " ";				// Output intial conditions vector
 	}
 	cout << endl << endl;
-
-	// Prompt user to choose which scheme the user wants use to solve the system
-	// The Forward Euler, Backward Euler or the Crank-Nicolson Schemes
-
-	char cont = 'y';
-
-	while (cont == 'y')
-	{
-		cout << "Enter value for theta " << endl << "0 for the Forward Euler Scheme " << endl << "1 for the Backward Euler Scheme " << endl << " 0.5 for the Crank-Nicolson Scheme ";
-		cin >> theta;
-		while (theta != 0.0 && theta != 0.5 && theta != 1.0)
-		{
-			cout << "Theta has to be 0,1 or 0.5. Please enter the value again!";
-			cin >> theta;
-		}
 
 		// Initialise the diagonals of A
 
@@ -212,7 +135,7 @@ int main()
 
 		if (theta == 0.0)
 		{
-			cout << endl << "Forward Euler scheme" << endl << endl;
+			cout << endl << "Forward Euler scheme" << endl;
 
 			// The time iteration loop
 
@@ -230,7 +153,7 @@ int main()
 		}
 		else if (theta == 1.0)
 		{
-			cout << endl << "Backward Euler" << endl << endl;
+			cout << endl << "Backward Euler" << endl;
 
 			// The time iteration loop
 
@@ -248,7 +171,7 @@ int main()
 		}
 		else
 		{
-			cout << endl << "Crank-Nicolson" << endl << endl;
+			cout << endl << "Crank-Nicolson" << endl;
 
 			// The time iteration loop
 
@@ -267,7 +190,7 @@ int main()
 
 		// Display the final temperature vector
 
-		cout << "The Final Temperature Vector" << endl << endl;		// Print on output screen
+		cout << "The final temperature vector" << endl << endl;		// Print on output screen
 
 		for (int i = 0; i < Nx + 1; i++)
 		{
@@ -277,25 +200,35 @@ int main()
 
 		// Display the temperature at L/2 at all the time steps
 
-		cout << "The Temperature at L/2 at all the time steps" << endl << endl;		// Print on output screen
+		cout << "The temperature at L/2 at all the time steps" << endl << endl;		// Print on output screen
 
 		for (int i = 0; i <= Nt; i++)
 		{
 			cout << UL[i] << " ";		// Output the temperature at L/2 at all time steps in vector form
 		}
 		
-		// Calculate the time to run the program
+		// Write the time vector and UL vector into a .txt file to be used by python
 
-		float dttt = (clock() - start) / (double)CLOCKS_PER_SEC;
-		cout << endl << endl << endl << "Time taken to run the program (s)" << endl << endl;		// Print on output screen
-		cout <<dttt << endl << endl;
+		ofstream file;
+		file.open("Temperaturehalf.txt");	// Open the file
 
-		// Ask the user whether he/she would like to continue and use the same/different scheme 
+		for (int i = 0; i < Nt + 1; i++)
+		{
+			file << i*dt << "\t" << UL[i] << endl;	// Write the time and temperature of L/2 at each time step
+		}
 
-		cout << endl << "Would you like to continue? (y = Yes, n = No) ";
-		cin >> cont;
-		cout << endl << endl;
-	}
+		file.close();	// Close the file
+
+						// Write the U vector into a .txt file to be used by python
+
+		file.open("Temperature.txt");		// Open the file
+
+		for (int i = 0; i < Nx + 1; i++)
+		{
+			file << U[i] << endl;			// Write one value at a time in a loop
+		}
+
+		file.close();	// Close the file
 
 	system("pause");
 

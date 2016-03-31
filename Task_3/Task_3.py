@@ -8,6 +8,10 @@ import subprocess
 import matplotlib.pyplot as mp
 import numpy as np
 
+# Increase the font size in the plots 
+
+mp.rcParams.update({'font.size': 22})
+
 # Provide variables as the arguments to the script in string format
 
 L=1           # Length of the domain
@@ -156,7 +160,7 @@ mp.show()
 
 # Provide the Nt values as strings
 
-Ntt=["800","900","1000","1100"] #"1200","1400","1500"]
+Ntt=["800","900","1000","1100"]
     
 # Start the loop for the different values of Nt
 RMSt=[]             # Initialise empty array to store RMS value
